@@ -9,9 +9,34 @@ Everything is customizable from the in-app **Settings** tab or by editing `setti
 ## Requirements
 
 - Windows 10/11
-- Node.js (already installed on this machine at `C:\Program Files\nodejs`)
+- Node.js — the installer checks for it and points you to the download if it is missing
+
+## Install (one line)
+
+Open **Git Bash** (on Windows this ships with [Git for Windows](https://git-scm.com/download/win)) and run:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/USER/FunkyEh/main/floating-island/install.sh | bash
+```
+
+That checks for Node.js, downloads the app to `~/.floating-island`, installs its dependencies, and
+adds a **Floating Island** shortcut to your desktop. To launch it the moment the install finishes,
+prefix the command with `FLOATING_ISLAND_START=1`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/USER/FunkyEh/main/floating-island/install.sh | FLOATING_ISLAND_START=1 bash
+```
+
+> **Note:** replace `USER` above with the GitHub account that hosts this repository. The same
+> placeholder is at the top of `install.sh` (the `REPO_URL` / `REPO_ARCHIVE` lines) — update both
+> once so the one-liner works for everyone.
+
+The installer is safe to re-run: it reuses an existing checkout and only reinstalls dependencies.
+Run `bash install.sh --help` for all options (`--start`, `--no-shortcut`, `--dir`, `--ref`).
 
 ## Run
+
+Manual / developer install, from a local clone:
 
 ```powershell
 cd floating-island
