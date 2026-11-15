@@ -1,0 +1,17 @@
+{
+  "name": "floating-island",
+  "productName": "Floating Island",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Customizable always-on-top system monitor island with task manager and quick launch",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "systeminformation": "^5.33.19"
+  },
+  "devDependencies": {
+    "electron": "^45.3.1"
+  }
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Floating Island</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="root" class="theme-dark">
+    <div class="island" id="island">
+      <header class="pill" id="pill">
+        <div class="grip" id="grip" title="Drag to move">
+          <span class="status-dot" id="statusDot"></span>
+        </div>
+        <div class="pill-metrics" id="pillMetrics"></div>
+        <button class="pill-chevron" id="btnChevron" type="button" title="Expand">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </header>
+
+      <section class="panel" id="panel">
+        <nav class="tabs" id="tabs" aria-label="Views"></nav>
+
+        <div class="panes" id="panes">
+          <section class="pane" data-pane="performance">
+            <div class="gauge-row">
+              <div class="gauge" data-gauge="cpu">
+                <svg viewBox="0 0 76 76" aria-hidden="true">
+                  <circle class="ring-bg" cx="38" cy="38" r="31"></circle>
+                  <circle class="ring-fg" cx="38" cy="38" r="31" data-ring="cpu"></circle>
+                </svg>
+                <div class="gauge-center"><strong data-gauge-value="cpu">--</strong><span>CPU</span></div>
+              </div>
+              <div class="gauge" data-gauge="gpu">
+                <svg viewBox="0 0 76 76" aria-hidden="true">
+                  <circle class="ring-bg" cx="38" cy="38" r="31"></circle>
+                  <circle class="ring-fg gpu" cx="38" cy="38" r="31" data-ring="gpu"></circle>
+                </svg>
+                <div class="gauge-center"><strong data-gauge-value="gpu">--</strong><span>GPU</span></div>
+              </div>
+              <div class="gauge" data-gauge="ram">
+                <svg viewBox="0 0 76 76" aria-hidden="true">
+                  <circle class="ring-bg" cx="38" cy="38" r="31"></circle>
+                  <circle class="ring-fg ram" cx="38" cy="38" r="31" data-ring="ram"></circle>
+                </svg>
+                <div class="gauge-center"><strong data-gauge-value="ram">--</strong><span>RAM</span></div>
+              </div>
+            </div>
+
+            <div class="subline" id="gpuInfo">GPU unavailable</div>
+
+            <div class="cores-wrap">
+              <div class="section-head">
+                <span>CPU cores</span>
+                <span class="dim" id="coreCount"></span>
+              </div>
+              <div class="cores" id="cores"></div>
+            </div>
+
+            <div class="net-card">
+              <div class="net-head">
+                <span class="net-label">Network</span>
+                <span class="net-iface" id="netIface">--</span>
+              </div>
+              <div class="net-stats">
+                <div class="net-stat down">
+                  <div class="net-stat-top"><span class="net-arrow">&#8595;</span><span>Receive</span></div>
+                  <div class="net-stat-value">
+                    <strong id="netDown">--</strong><span id="netDownUnit">Mbps</span>
+                  </div>
+                </div>
+                <div class="net-stat up">
+                  <div class="net-stat-top"><span class="net-arrow">&#8593;</span><span>Send</span></div>
+                  <div class="net-stat-value">
+                    <strong id="netUp">--</strong><span id="netUpUnit">Mbps</span>
+                  </div>
+                </div>
+              </div>
+              <div class="net-graph">
+                <canvas id="netChart" height="150"></canvas>
+                <span class="net-window" id="netWindow">60 s</span>
+              </div>
+              <div class="net-totals" id="netTotals">
+                <span class="down">&#8595; <b id="netSessionDown">0 MB</b> session</span>
+                <span class="up">&#8593; <b id="netSessionUp">0 MB</b> session</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="pane" data-pane="processes">
+            <div class="proc-head">
+              <div class="seg" id="procSort">
+                <button type="button" data-sort="cpu">CPU</button>
+                <button type="button" data-sort="mem">Memory</button>
+              </div>
+              <span class="dim" id="procCount"></span>
+            </div>
+            <div class="proc-list" id="procList"></div>
+          </section>
+
+          <section class="pane" data-pane="quicklaunch">
+            <div class="launch-grid" id="launchGrid"></div>
+            <p class="hint">Edit these tiles in Settings &rsaquo; Quick launch.</p>
+          </section>
+
+          <section class="pane notes-pane" data-pane="notes">
+            <div class="notes-head">
+              <span class="notes-title">Notes</span>
+              <span class="notes-count" id="notesCount"></span>
+            </div>
+            <textarea
+              id="notesText"
+              class="notes-text"
+              placeholder="Jot something down…"
+              spellcheck="true"
+            ></textarea>
+            <div class="notes-foot">
+              <span class="notes-status" id="notesStatus">Saved automatically</span>
+              <div class="notes-actions">
+                <button type="button" class="note-btn" id="btnNotesCopy" title="Copy notes to clipboard">Copy</button>
+                <button type="button" class="note-btn danger" id="btnNotesClear" title="Erase all notes">Clear</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="pane" data-pane="settings">
+            <div id="settingsBody"></div>
+          </section>
+        </div>
+
+        <footer class="footer">
+          <span class="footer-info" id="footerInfo">Floating Island</span>
+          <div class="footer-actions">
+            <button type="button" class="icon-btn" id="btnOpenConfig" title="Open settings file">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h6l2 2h8v10H4z"/><path d="M4 10h16"/></svg>
+            </button>
+            <button type="button" class="icon-btn" id="btnHide" title="Hide to tray">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.6"/></svg>
+            </button>
+            <button type="button" class="icon-btn danger" id="btnQuit" title="Quit Floating Island">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v8"/><path d="M6.5 6.5a8 8 0 1 0 11 0"/></svg>
+            </button>
+          </div>
+        </footer>
+      </section>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>
